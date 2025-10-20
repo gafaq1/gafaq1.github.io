@@ -23,11 +23,8 @@
  
 </head>
 <body>
-
-
-
-
 <script>
+/* === Инициализация Altcraft Popup Library === */
 (function (popupFunc) {
     var script = document.createElement('script');
     var firstScript = document.getElementsByTagName('script')[0];
@@ -43,59 +40,64 @@
 </script>
 
 <script>
-// === Настройки ===
+/* === Настройки цепочки попапов === */
 const popupChain = [
-  { id: 'AP-4jAsUuppDyGo3ccLy', delay: 0 },   // Попап №1, сразу
-  { id: 'AP-4jAsUuppDy5rs92zO', delay: 3000 }, // Попап №2 через 3 сек после закрытия №1
-  { id: 'AP-7Lq2Y1q3pvMaEryGW', delay: 2000 }  // Попап №3 через 2 сек после закрытия №2
+  { id: 'AP-4jAsUuppDyGo3ccLy', delay: 1000 },  // Попап №1, показываем первым, пауза 1 сек после закрытия
+  { id: 'AP-4jAsUuppDy5rs92zO', delay: 2000 },  // Попап №2, пауза 2 сек после закрытия
+  { id: 'AP-7Lq2Y1q3pvMaEryGW', delay: 2000 }   // Попап №3, пауза 2 сек после закрытия
 ];
 
-// === Сервисная функция ===
+/**
+ * Функция ждёт, пока текущий попап исчезнет из DOM
+ * (определяем закрытие по отсутствию элементов с классом .ac-popup)
+ */
 function waitForPopupToClose(callback) {
   const observer = new MutationObserver(() => {
-    const popupVisible = document.querySelector('[class*="ac-popup"]'); 
+    const popupVisible = document.querySelector('[class*="ac-popup"]');
     if (!popupVisible) {
       observer.disconnect();
       callback();
     }
   });
-
-  // следим за всем body
   observer.observe(document.body, { childList: true, subtree: true });
 }
 
-// === Основная логика ===
+/**
+ * Показывает попапы по цепочке
+ */
 function showPopupChain(index = 0) {
-  if (index >= popupChain.length) return;
+  if (index >= popupChain.length) return; // конец цепочки
 
   const popup = popupChain[index];
+  console.log('Показываю попап:', popup.id);
+
+  // создаём и показываем попап
   acpopup('create', popup.id);
   acpopup('show', popup.id);
 
-  console.log('Показан попап', popup.id);
-
-  // ждём закрытия попапа
+  // ждём, пока пользователь его закроет
   waitForPopupToClose(() => {
-    console.log('Закрыт попап', popup.id);
-    // запускаем следующий попап с задержкой
-    setTimeout(() => showPopupChain(index + 1), popup.delay);
+    console.log('Закрыт попап:', popup.id);
+    setTimeout(() => {
+      showPopupChain(index + 1);
+    }, popup.delay);
   });
 }
 
-// === Запуск по триггеру ===
+/**
+ * Автоматический запуск через 5 секунд после загрузки страницы
+ */
 window.addEventListener('load', function() {
-  // Пример триггера — клик по кнопке
-  const trigger = document.querySelector('#start-popup-chain');
-  if (trigger) {
-    trigger.addEventListener('click', () => {
-      showPopupChain();
-    });
-  } else {
-    // можно автозапуск, если нет кнопки
-    // showPopupChain();
-  }
+  setTimeout(() => {
+    console.log('Старт цепочки попапов через 5 секунд после загрузки');
+    showPopupChain();
+  }, 5000);
 });
 </script>
+
+
+
+
 
 <!-- Пример кнопки-триггера -->
 <button id="start-popup-chain" style="margin:50px;padding:10px 20px;">Запустить цепочку попапов</button>
