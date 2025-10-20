@@ -23,6 +23,87 @@
  
 </head>
 <body>
+<script>
+/* === Инициализация Altcraft Popup Library === */
+(function (popupFunc) {
+  var script = document.createElement('script');
+  var firstScript = document.getElementsByTagName('script')[0];
+  var popupFuncName = popupFunc !== 'acpopup' ? '?f=' + popupFunc : '';
+  window[popupFunc] = window[popupFunc] || function () {
+    (window[popupFunc].actions = window[popupFunc].actions || []).push(arguments);
+  };
+  window[popupFunc].last_init = 1 * new Date();
+  script.async = true;
+  script.src = 'https://pxl.ru.altkraft.com/popup/v1/js/popupLibrary.js' + popupFuncName;
+  firstScript.parentNode.insertBefore(script, firstScript);
+})('acpopup');
+</script>
+
+<script>
+/* === Настройки цепочки попапов === */
+const popupChain = [
+  { id: 'AP-4jAsUuppDyGo3ccLy', delay: 1000 },  // Попап 1 → ждать 1 сек после закрытия
+  { id: 'AP-4jAsUuppDy5rs92zO', delay: 1500 },  // Попап 2 → ждать 1.5 сек
+  { id: 'AP-7Lq2Y1q3pvMaEryGW', delay: 1500 }   // Попап 3 → ждать 1.5 сек
+];
+
+/**
+ * Проверяет, есть ли на странице видимый попап Altcraft
+ */
+function isPopupVisible() {
+  const popups = document.querySelectorAll('[class*="ac-popup"]');
+  for (let popup of popups) {
+    const style = window.getComputedStyle(popup);
+    const hidden =
+      style.display === 'none' ||
+      style.visibility === 'hidden' ||
+      style.opacity === '0' ||
+      popup.hasAttribute('aria-hidden');
+    if (!hidden) return true; // найден видимый попап
+  }
+  return false;
+}
+
+/**
+ * Ждёт, пока все попапы станут невидимыми
+ */
+function waitForPopupToClose(callback) {
+  const interval = setInterval(() => {
+    if (!isPopupVisible()) {
+      clearInterval(interval);
+      callback();
+    }
+  }, 500); // проверяем каждые 0.5 сек
+}
+
+/**
+ * Показывает попапы по очереди
+ */
+function showPopupChain(index = 0) {
+  if (index >= popupChain.length) return; // конец цепочки
+  const popup = popupChain[index];
+
+  console.log('▶️ Показываю попап:', popup.id);
+  acpopup('create', popup.id);
+  acpopup('show', popup.id);
+
+  // ждём, пока текущий попап закроют (станет невидимым)
+  waitForPopupToClose(() => {
+    console.log('✅ Закрыт попап:', popup.id);
+    setTimeout(() => showPopupChain(index + 1), popup.delay);
+  });
+}
+
+/**
+ * Автоматический запуск через 5 секунд после загрузки страницы
+ */
+window.addEventListener('load', function () {
+  setTimeout(() => {
+    console.log('🚀 Старт цепочки попапов через 5 сек');
+    showPopupChain();
+  }, 5000);
+});
+</script>
 
 
 
