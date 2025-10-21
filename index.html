@@ -2,6 +2,9 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Тестовый сайт с попапами</title>
 <script>
     (function (window, document, dataLayerName, containerID) {
         window[dataLayerName] = window[dataLayerName] || [];
@@ -17,24 +20,20 @@
         }
     }(window, document, 'acDataLayer', 'ATM-9RiTQQGTFB9kOTvCi'));
 </script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Урок 5. Тестирование браузерных пушей</title>
-  
 </head>
-<!-- Тестовый попап (ручной) -->
 <body>
-	<!-- Тестовый попап (ручной) -->
+
+<!-- Ручной попап -->
 <div id="manual-popup" style="display:none; position:fixed; top:50%; left:50%; 
 transform:translate(-50%, -50%); background:white; padding:20px; border:2px solid #333; 
 box-shadow:0 4px 10px rgba(0,0,0,0.3); z-index:1000;">
   <h2>Регистрационный попап (тест)</h2>
-  <p>Это тестовый ручной попап для проверки наложения Altcraft-попапа.</p>
+  <p>Это ручной попап для проверки наложения Altcraft-попапа.</p>
   <button id="close-manual-popup">Закрыть</button>
 </div>
 
-<!-- Кнопка для показа попапа (для теста) -->
 <button id="show-manual-popup">Показать регистрационный попап</button>
+
 <script>
   const manualPopup = document.getElementById('manual-popup');
   const showBtn = document.getElementById('show-manual-popup');
@@ -51,10 +50,8 @@ box-shadow:0 4px 10px rgba(0,0,0,0.3); z-index:1000;">
   });
 </script>
 
-
-	<h1>Добро пожаловать на мой сайт!</h1>
-    <p>Это простой маленький сайт на HTML. Здесь можно разместить любую информацию.</p>
-          
+<h1>Добро пожаловать на тестовый сайт!</h1>
+<p>Тут проверяем работу Altcraft-попапа с защитой от наложения.</p>
 
 </body>
 </html>
