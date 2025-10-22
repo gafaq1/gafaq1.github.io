@@ -14,7 +14,7 @@
         var dl = dataLayerName !== 'acDataLayer' ? '&l=' + dataLayerName : '';
         script.async = true;
         script.src = 'https://pxl.ru.altkraft.com/actm/js/actm.js?id=' + containerID + dl;
-       
+       script.type = 'module';
         if (firstScript && firstScript.parentNode) {
             firstScript.parentNode.insertBefore(script, firstScript);
         }
